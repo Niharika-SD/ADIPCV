@@ -1,0 +1,72 @@
+clear all
+close all
+
+input =imread('peppers.png');
+
+%reading the cie values
+filename = 'ciexyz31_1.csv';
+M = csvread(filename);
+M_norm =normalise_chart(M);
+
+%% Question 1
+
+%clustering violet green and yellow
+[violet_cluster, green_cluster, yellow_cluster] = colour_cluster(input,M_norm);
+
+figure;
+subplot(2,2,1);imshow(uint8(input),[]);
+title('original image')
+subplot(2,2,2);imshow(uint8(violet_cluster),[]);
+title('violet cluster')
+subplot(2,2,3);imshow(uint8(green_cluster),[]);
+title('green cluster')
+subplot(2,2,4);imshow(uint8(yellow_cluster),[]);
+title('yellow cluster')
+
+
+%% Question 2
+
+%creating histogram
+img = rgb2xyz(input);
+img_norm = normalise_xyz(img);
+hgram = create_wavelength_hist(img_norm,M_norm);
+figure;plot(360:1:830,hgram);
+title('normalised histogram')
+
+%% Question 3
+
+%K means implementation
+
+%reading files from a directory
+addpath('test_images');
+allFiles = dir('test_images');
+img_files = { allFiles.name };
+img_files([1,2]) = [];
+
+hgram_1 = [];
+for i = 1 : 21
+    hgram_1(i,:) = create_wavelength_hist(normalise_xyz(rgb2xyz(imread(char(img_files{1,i})))),M_norm);    
+end
+% save('hgram_1.mat',hgram_1);
+
+K = 2;
+% Number of iterations in K-Means
+max_iter = 10000;
+
+% Number of random initialisations in K-Means
+num_init = 100;
+
+label = K_Means_hist( hgram_1, K, max_iter, num_init );
+label =label';
+
+% Result of K means
+mkdir('K means output');
+
+for i = 1:K,
+    mkdir(['cluster/' num2str(i)]);
+end
+
+fprintf('\n separating the clusters \n');
+for j = 1:length(img_files),
+    imwrite(imread(char(img_files{1,j})),['cluster/' num2str(label(i)) '/' char(img_files{1,j})]);
+end

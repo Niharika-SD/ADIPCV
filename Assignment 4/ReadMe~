@@ -1,0 +1,51 @@
+
+Instructions
+
+All the test images are supplied in the folder marked test_images
+Run the code CIE_Filtration
+
+
+Part_1
+ 
+
+The input image used is peppers.png read in RGB format.It is then converted to xyz format and then normalised using the function normalise_xyz
+
+Functions used 
+1.rgb2xyz(input): converts the rgb image to an xyz image
+2.normalise_xyz(input): Takes input as the xyz image and then normalises the x and y values and returns the normalised xyz space image as output
+3.normalise_chart(input): takes the CIE chart as the input and normalises the xyz values and calulates the angle associated with each wavelength from the normalised xyz values through the center co-ordinate (0.33,0.33). The output is the normalised chart appended with the angle associated with each wavelength
+4.cluster_any_colour(input,M_norm,Right,Left): Takes the input(normalised image), the normalised CIE matrix and the Right and Left extreme wavelengths for colour filtration.
+5.colour_cluster(input_1,M_norm): Takes the original image as input along with the normalised histogram and segments out the colours belonging to Green, Violet and Yellow regions and returns them as separate images containing the pixels corresponding to each of these colours based on the wavelength.
+
+Results from the clustering are displayed.
+
+
+Part_2
+
+The input image used is peppers.png read in RGB format.It is then converted to xyz format and then normalised using the function normalise_xyz
+
+Functions used 
+1.rgb2xyz(input): converts the rgb image to an xyz image
+2.normalise_xyz(input): Takes input as the xyz image and then normalises the x and y values and returns the normalised xyz space image as output
+3.normalise_chart(input): takes the CIE chart as the input and normalises the xyz values and calulates the angle associated with each wavelength from the normalised xyz values through the center co-ordinate (0.33,0.33). The output is the normalised chart appended with the angle associated with each wavelength
+4.create_wavelength_hist(input,M_norm): Calculates the histogram of the input image using the wavelength information given in the normalised matrix M_norm corresponding to each wavelength 
+
+The histogram of 'peppers.png' is displayed. The histograms for all the input images are provided in the folder marked histograms in results
+
+Part_3
+
+The histograms for each of the input images are calculated and stored in a matrix marked hgram_1.mat and passed to the K means function after reading the images from the directory test_images
+
+Functions used 
+1.rgb2xyz(input): converts the rgb image to an xyz image
+2.normalise_xyz(input): Takes input as the xyz image and then normalises the x and y values and returns the normalised xyz space image as output
+3.normalise_chart(input): takes the CIE chart as the input and normalises the xyz values and calulates the angle associated with each wavelength from the normalised xyz values through the center co-ordinate (0.33,0.33). The output is the normalised chart appended with the angle associated with each wavelength
+4.K_Means_hist( histogram_matrix, k, max_iterations, init) : takes the inputs as histograms of each of the images, number of clusters k maximum no of iterations brfore break(max_iterations) and the number of random initialisations and computes the optimal labels for each of the images based on normalised Eucledian distances between histograms by calculating the optimum cost achievable. Default K =2 and max_iterations =100000 and init =10. 
+
+Note:
+1.Possibly, a given cluster may contain no images, try increasing the number of random initialisations
+2.Calculating the histograms of each of the images takes some computational time.Could be implemented faster if the histograms are stored before hand and loaded instead
+
+The labels are used to separate the read images into individual folders based on the cluster assigned, results from the runs(K=2,3,4) have been placed in the /Results/K_means folder.
+
+

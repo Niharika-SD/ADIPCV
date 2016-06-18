@@ -1,0 +1,11 @@
+Discussions:
+
+Feature matching:
+Different implementations for extracting features are available such as Harris corner detection, SURF and SIFT. 
+The feature matching by Corner Harris gave very few correspondences while those by SURF gave too many correspondences due to which SIFT was used
+
+image resizing: a rescaling of the images was done before using feature matching and projection to reduce the computation time
+
+histogram equalisation step: A contrast enhancement and histogram equalisation step was used in the final stage of mosaicing and interpolation example
+This is in order to bring both the images to the same dynamic range and improve the contrast in case the dynamic ranges of the two images is very different 
+

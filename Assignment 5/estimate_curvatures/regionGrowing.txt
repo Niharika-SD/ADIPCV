@@ -1,0 +1,60 @@
+function J = km_regionGrowing(cIM, idxX,idxY)
+
+initPos(:,1) = idxX;
+initPos(:,2) = idxY;
+thresVal = double((max(cIM(:)) - min(cIM(:)))) * 0.05;
+%thresVal = 10;
+maxDist = inf;
+[nRow, nCol] = size(cIM);
+
+% initial pixel value
+regVal = double(cIM(initPos(1), initPos(2)));
+
+
+
+% preallocate array
+J = zeros(nRow, nCol);
+
+% add the initial pixel to the queue
+
+%%% START OF REGION GROWING ALGORITHM
+for num = 1:length(idxX)
+    queue = [initPos(num,1), initPos(num,2)];
+    while size(queue, 1)
+      % the first queue position determines the new values
+      xv = queue(1,1);
+      yv = queue(1,2);  
+
+      % .. and delete the first queue position
+      queue(1,:) = [];
+
+      % check the neighbors for the current position
+      for i = -1:1
+        for j = -1:1               
+            if xv+i > 0  &&  xv+i <= nRow &&...          % within the x-bounds?
+               yv+j > 0  &&  yv+j <= nCol &&...          % within the y-bounds?         
+               any([i, j])       &&...      % i/j/k of (0/0/0) is redundant!
+               ~J(xv+i, yv+j) &&...          % pixelposition already set?
+               sqrt( (xv+i-initPos(num,1))^2 +...
+                     (yv+j-initPos(num,2))^2 ) < maxDist &&...   % within distance?
+               cIM(xv+i, yv+j) <= (regVal + thresVal) &&...% within range
+               cIM(xv+i, yv+j) >= (regVal - thresVal) % of the threshold?
+
+               % current pixel is true, if all properties are fullfilled
+               J(xv+i, yv+j) = true; 
+
+               % add the current pixel to the computation queue (recursive)
+               queue(end+1,:) = [xv+i, yv+j];   
+           end               
+
+        end  
+      end
+    end
+end
+%%% END OF REGION GROWING ALGORITHM
+
+
+% loop through each slice, fill holes and extract the polygon vertices
+
+    % fill the holes inside the mask
+    J(:,:) = imfill(J(:,:), 'holes');     

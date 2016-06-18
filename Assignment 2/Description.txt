@@ -1,0 +1,39 @@
+
+Description of algorithms and functions used
+
+1a.
+
+ApplicationGUI(filename):
+The function ApplicationGUI takes the image as input and allows the user to select the corner points in the image clockwise starting from the top right corner.Then the function computes a projective transform which restores the image to a fronto-rectilinear view using projective transformation.
+
+2. Homography matrices between pairs of images are computed by feature extraction using SIFT followed by using cp2tform to calculate the required transformation from the corresponding set of points 
+
+homography_computation.m : computes homographies of each pair
+
+km_SIFT_match(img1,img2): extracts correspondences between matched features from the input images by calling sift.m
+sift(img): performs a scale invariant feature transform on the input image (requires support of exec. siftWin32) 
+bilinearInterpolation(img,size): takes the image as arguement and upscales by use of bilinear interpolation to match dimensions specified
+
+2a.Restoration of blurred view: 
+1.The images Ajanta_1.jpg and Ajanta_2.jpg are taken as inputs and a feature matching is done using the SIFT algorithm implementation (requires siftWin32 executable). 
+2.Once the points are extracted, a projective transformation is calculated in order to restore the view of the first image in the plane of the second. 
+3.After this the 2 images are stitched together by limiting the bounds of the transformed images.
+4. The stitched image is now transformed to the view of the blurred image using projective transformation and SIFT(same procedure as above)
+5.Pixels common to the two views are replaced to give the final restored image
+
+2b. Mosaicing:
+
+1.The images Ajanta_1.jpg and Ajanta_2.jpg are taken as inputs and a feature matching is done using the SIFT algorithm implementation (requires siftWin32 executable). 
+2.Once the points are extracted, a projective transformation is calculated in order to restore the view of the first image in the plane of the second. 
+3.After this the 2 images are stitched together by limiting the bounds of the transformed images. 
+4.Final reconstruction is done by taking averaged version of the histogram equalised transformed images.(performed by conversion from rbg to hsv and equalisation of the v component)
+
+2c. Bilinear inperpolation
+
+1.The images Ajanta_1.jpg and Ajanta_2.jpg are taken as inputs and a feature matching is done using the SIFT algorithm implementation (requires siftWin32 executable). 
+2.Once the points are extracted, a projective transformation is calculated in order to restore the view of the second image in the plane of the first. 
+3.After this the 2 images are stitched together by limiting the bounds of the transformed images. 
+4.Final reconstruction is done by taking averaged version of the histogram equalised transformed images.
+5.The information belonging to the view of Ajanta_1.jpg is extracted
+6.Following this a bilinear interplolation is performed for upscaling by a factor of 2.
+  
